@@ -1,6 +1,12 @@
 {
-  "extends": [
-    "oclif",
-    "oclif-typescript"
-  ]
+  "extends": ["oclif", "oclif-typescript"],
+  "rules": {
+    "quotes": "off",
+    "semi": "off",
+    "no-negated-condition": "off",
+    "object-curly-spacing": "off",
+    "indent": ["error", 2],
+    "arrow-parens": "off",
+    "no-console": "off"
+  }
 }
