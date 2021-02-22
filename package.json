@@ -1,7 +1,7 @@
 {
   "name": "fpms-client",
   "description": "fast package manager server for yarn",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "author": "sh4869 <nobuk4869@gmail.com>",
   "bin": {
     "fpms": "./bin/run"
