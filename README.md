@@ -1,5 +1,4 @@
-fpms-client
-===========
+# fpms-client
 
 fast package manager server for yarn
 
@@ -9,47 +8,76 @@ fast package manager server for yarn
 [![License](https://img.shields.io/npm/l/fpms-client.svg)](https://github.com/ssh://git@github.com/sh4869/fpms-client.git/blob/master/package.json)
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
+
+# Require
+
+* yarn
+
 # Usage
 <!-- usage -->
+
 ```sh-session
 $ npm install -g fpms-client
 $ fpms COMMAND
 running command...
 $ fpms (-v|--version|version)
-fpms-client/1.0.0 darwin-x64 node-v14.3.0
+fpms-client/0.0.1 darwin-x64 node-v13.14.0
 $ fpms --help [COMMAND]
 USAGE
   $ fpms COMMAND
 ...
 ```
+
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`fpms hello [FILE]`](#fpms-hello-file)
-* [`fpms help [COMMAND]`](#fpms-help-command)
 
-## `fpms hello [FILE]`
+- [`fpms add [PACKAGE]`](#fpms-add-file)
+- [`fpms help [COMMAND]`](#fpms-help-command)
 
-describe the command here
+## `fpms add [PACKAGE]`
+
+add package for npm.
 
 ```
+add package
+
 USAGE
-  $ fpms hello [FILE]
+  $ fpms add [PACKAGES]
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ fpms hello
-  hello world from ./src/hello.ts!
+  --fetch-only only fetching data from fpms
 ```
 
-_See code: [src/commands/hello.ts](https://github.com/sh4869/fpms-client/blob/v1.0.0/src/commands/hello.ts)_
+### example
+
+```
+# sample
+$ ls
+package.json
+$ fpms add react
+☑ fetch packages from fpms
+☑ update yarn.lock
+☑ update package.json
+
+yarn install v1.22.10
+[1/4] Resolving packages...
+success Already up-to-date.
+Done in 0.07s.
+
+☑ run yarn
+# multi install
+$ fpms add react gatsby
+...
+# version specify
+$ fpms add react@^16.0.0
+...
+```
+
+_See code: [src/commands/add.ts](https://github.com/sh4869/fpms-client/blob/v0.0.1/src/commands/add.ts)_
 
 ## `fpms help [COMMAND]`
 
