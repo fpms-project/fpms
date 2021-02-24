@@ -8,15 +8,19 @@ fast package manager server for yarn
 [![License](https://img.shields.io/npm/l/fpms-client.svg)](https://github.com/ssh://git@github.com/sh4869/fpms-client.git/blob/master/package.json)
 
 <!-- toc -->
+
+- [fpms-client](#fpms-client)
+- [Require](#require)
 - [Usage](#usage)
 - [Commands](#commands)
 <!-- tocstop -->
 
 # Require
 
-* yarn
+- yarn
 
 # Usage
+
 <!-- usage -->
 
 ```sh-session
@@ -32,49 +36,24 @@ USAGE
 ```
 
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
 
-- [`fpms add [PACKAGE]`](#fpms-add-file)
+- [`fpms add`](#fpms-add)
 - [`fpms help [COMMAND]`](#fpms-help-command)
 
-## `fpms add [PACKAGE]`
+## `fpms add`
 
-add package for npm.
-
-```
 add package
 
+```
 USAGE
-  $ fpms add [PACKAGES]
+  $ fpms add
 
 OPTIONS
-  --fetch-only only fetching data from fpms
-```
-
-### example
-
-```
-# sample
-$ ls
-package.json
-$ fpms add react
-☑ fetch packages from fpms
-☑ update yarn.lock
-☑ update package.json
-
-yarn install v1.22.10
-[1/4] Resolving packages...
-success Already up-to-date.
-Done in 0.07s.
-
-☑ run yarn
-# multi install
-$ fpms add react gatsby
-...
-# version specify
-$ fpms add react@^16.0.0
-...
+  --fetch-only  only fetching data from fpms
 ```
 
 _See code: [src/commands/add.ts](https://github.com/sh4869/fpms-client/blob/v0.0.1/src/commands/add.ts)_
@@ -95,4 +74,10 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+
 <!-- commandsstop -->
+
+# TODO
+
+- validaiton
+- support peerDependencies/optionalDependencies
