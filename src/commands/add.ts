@@ -1,20 +1,23 @@
 import { Command, flags } from "@oclif/command";
 import * as lockfile from "@yarnpkg/lockfile";
 import * as child_process from "child_process";
-import { SingleBar } from "cli-progress";
 import * as fs from "fs";
 import { requestCalculated } from "../client/fpms-server";
 import { PackageRequest, RequestToYarnPackMap } from "../types";
 import { createRequestToYarnPackMap } from "../yarnlock/update";
+import * as debug from "debug";
 
 export default class Add extends Command {
   static strict = false;
 
   static flags = {
     "fetch-only": flags.boolean({ default: false, description: "only fetching data from fpms" }),
+    verbose: flags.boolean({ default: false, description: "output verbose message" }),
   };
 
   static description = "add package";
+
+  private d = debug("add command");
 
   async run() {
     // parse argument
@@ -23,13 +26,10 @@ export default class Add extends Command {
     // fetch data from fpms and sconvert fpms data
     const packs = argv.map((arg) => this.parsearg(arg));
     const { map, requests } = await this.fetchData(packs);
-    console.log("☑ fetch packages from fpms");
+    this.log("☑ fetch packages from fpms");
     if (!flags["fetch-only"]) {
-      this.updateYarnLock(map);
-      console.log("☑ update yarn.lock");
-      // update package.json
-      this.updatePackageJson(requests);
-      console.log("☑ update package.json");
+      await Promise.all([this.updateYarnLock(map), this.updatePackageJson(requests)]);
+      this.d("updated files");
       // exec yarn
       this.executeYarn();
     }
@@ -53,27 +53,21 @@ export default class Add extends Command {
   private async fetchData(
     packs: { name: string; range: string | null }[]
   ): Promise<{ map: RequestToYarnPackMap; requests: PackageRequest[] }> {
-    const bar = new SingleBar({});
-    bar.start(packs.length, 0);
-    const v = await Promise.all(
-      packs.map((v) =>
-        requestCalculated(v.name, v.range).then((v) => {
-          bar.increment();
-          return v;
-        })
-      )
-    );
-    bar.stop();
+    this.d("start fetch data");
+    const v = await Promise.all(packs.map((v) => requestCalculated(v.name, v.range)));
+    this.d("end fetch data");
+    const map = v.map((z) => createRequestToYarnPackMap(z)).reduce((p, c) => Object.assign(p, c));
+    this.d("end convert data");
     return {
-      map: v.map((z) => createRequestToYarnPackMap(z)).reduce((p, c) => Object.assign(p, c)),
+      map,
       requests: v.map((z) => z.request),
     };
   }
 
-  private updateYarnLock(newmap: RequestToYarnPackMap) {
+  private async updateYarnLock(newmap: RequestToYarnPackMap) {
     let updated;
     if (fs.existsSync("yarn.lock")) {
-      const yarnlock = fs.readFileSync("yarn.lock").toString();
+      const yarnlock = (await fs.promises.readFile("yarn.lock")).toString();
       const parse = lockfile.parse(yarnlock);
       if (parse.type !== "success") throw new Error("error of reading yarn.lock");
       updated = Object.assign(parse.object, newmap);
@@ -81,10 +75,11 @@ export default class Add extends Command {
       updated = newmap;
     }
     const s = lockfile.stringify(updated);
-    fs.writeFileSync("yarn.lock", s);
+    await fs.promises.writeFile("yarn.lock", s);
+    this.log("☑ update yarn.lock");
   }
 
-  private updatePackageJson(added: { name: string; range: string }[]) {
+  private async updatePackageJson(added: { name: string; range: string }[]) {
     if (!fs.existsSync("package.json")) throw new Error("package.json not found");
     const p = JSON.parse(fs.readFileSync("package.json").toString());
     const v = p.dependencies || {};
@@ -92,15 +87,15 @@ export default class Add extends Command {
       v[z.name] = z.range;
     });
     p.dependencies = v;
-    fs.writeFileSync("package.json", JSON.stringify(p, null, 2));
+    await fs.promises.writeFile("package.json", JSON.stringify(p, null, 2));
+    this.log("☑ update package.json");
   }
 
   private executeYarn() {
-    console.log("");
+    this.log("");
     const s = child_process.spawn("yarn", { stdio: "inherit" });
     s.on("close", () => {
-      console.log("");
-      console.log("☑ run yarn");
+      this.log("\n☑ run yarn");
     });
   }
 }
