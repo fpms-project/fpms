@@ -1,7 +1,7 @@
 {
   "name": "fpms-client",
   "description": "fast package manager client for npm",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "sh4869 <nobuk4869@gmail.com>",
   "bin": {
     "fpms": "./bin/run"

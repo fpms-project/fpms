@@ -27,7 +27,7 @@ $ npm install -g fpms-client
 $ fpms COMMAND
 running command...
 $ fpms (-v|--version|version)
-fpms-client/0.0.2 darwin-x64 node-v13.14.0
+fpms-client/0.0.3 darwin-x64 node-v13.14.0
 $ fpms --help [COMMAND]
 USAGE
   $ fpms COMMAND
@@ -54,7 +54,7 @@ OPTIONS
   --verbose     output verbose message
 ```
 
-_See code: [src/commands/add.ts](https://github.com/sh4869/fpms-client/blob/v0.0.2/src/commands/add.ts)_
+_See code: [src/commands/add.ts](https://github.com/sh4869/fpms-client/blob/v0.0.3/src/commands/add.ts)_
 
 ## `fpms help [COMMAND]`
 
