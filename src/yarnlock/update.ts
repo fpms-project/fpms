@@ -13,24 +13,25 @@ export const convert = (obj: FpmsPackage): YarnPackage => {
   return v;
 };
 
-export const createRequestToYarnPackMap = (added: CalculatedResponse): RequestToYarnPackMap => {
+export const createRequestToYarnPackMap = (added: {
+  request: { name: string; range: string | null };
+  response: CalculatedResponse;
+}): RequestToYarnPackMap => {
   const set: RequestToYarnPackMap = {};
-  const list = added.rds.packages.concat(added.rds.target);
+  const list = added.response.packages.concat(added.response.target);
   list.forEach((v) => {
     const z = Object.entries(v.dep);
     for (const d of z) {
       const r = new Range(d[1]);
-      const t = added.rds.packages
+      const t = list
         .filter((v) => v.name === d[0] && satisfies(v.version, r))
         .sort((l, r) => (gt(l.version, r.version) ? 1 : -1))[0];
       set[d[0] + "@" + d[1]] = convert(t);
     }
   });
   // requestについて
-  const r = new Range(added.request.range);
-  const t = list
-    .filter((v) => v.name === added.request.name && satisfies(v.version, r))
-    .sort((l, r) => (gt(l.version, r.version) ? 1 : -1))[0];
-  set[added.request.name + "@" + added.request.range] = convert(t);
+  const range = added.request.range !== null ? added.request.range : "^" + added.response.target.version;
+  const key = added.request.name + "@" + range;
+  set[key] = convert(added.response.target);
   return set;
 };

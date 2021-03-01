@@ -1,6 +1,6 @@
 export type PackageRequest = {
   name: string;
-  range: string;
+  range: string | null;
 };
 
 export type FpmsPackage = {
@@ -21,9 +21,6 @@ export type YarnPackage = {
 export type RequestToYarnPackMap = { [key: string]: YarnPackage };
 
 export type CalculatedResponse = {
-  request: PackageRequest;
-  rds: {
-    target: FpmsPackage;
-    packages: Array<FpmsPackage>;
-  };
+  target: FpmsPackage;
+  packages: Array<FpmsPackage>;
 };

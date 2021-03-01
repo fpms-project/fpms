@@ -35,7 +35,7 @@ export default class Add extends Command {
     }
   }
 
-  private parsearg(pack: string) {
+  private parsearg(pack: string): PackageRequest {
     // react -> react, null
     // @types/node -> @types/node, null
     // react@* -> react, *
@@ -54,14 +54,19 @@ export default class Add extends Command {
     packs: { name: string; range: string | null }[]
   ): Promise<{ map: RequestToYarnPackMap; requests: PackageRequest[] }> {
     this.d("start fetch data");
-    const v = await Promise.all(packs.map((v) => requestCalculated(v.name, v.range)));
+    const v = await Promise.all(
+      packs.map((v) => requestCalculated(v.name, v.range).then((r) => ({ request: v, response: r })))
+    );
     this.d("end fetch data");
     const map = v.map((z) => createRequestToYarnPackMap(z)).reduce((p, c) => Object.assign(p, c));
+    const requests = v.map((z) => {
+      return {
+        name: z.request.name,
+        range: z.request.range ? z.request.range : "^" + z.response.target.version,
+      };
+    });
     this.d("end convert data");
-    return {
-      map,
-      requests: v.map((z) => z.request),
-    };
+    return { map, requests };
   }
 
   private async updateYarnLock(newmap: RequestToYarnPackMap) {
@@ -79,7 +84,7 @@ export default class Add extends Command {
     this.log("☑ update yarn.lock");
   }
 
-  private async updatePackageJson(added: { name: string; range: string }[]) {
+  private async updatePackageJson(added: PackageRequest[]) {
     if (!fs.existsSync("package.json")) throw new Error("package.json not found");
     const p = JSON.parse(fs.readFileSync("package.json").toString());
     const v = p.dependencies || {};
