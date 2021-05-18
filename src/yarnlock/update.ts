@@ -26,7 +26,9 @@ export const createRequestToYarnPackMap = (added: {
       const t = list
         .filter((v) => v.name === d[0] && satisfies(v.version, r))
         .sort((l, r) => (gt(l.version, r.version) ? 1 : -1))[0];
-      set[d[0] + "@" + d[1]] = convert(t);
+      if (t !== undefined) {
+        set[d[0] + "@" + d[1]] = convert(t);
+      }
     }
   });
   // requestについて
