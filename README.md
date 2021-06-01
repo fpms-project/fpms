@@ -26,12 +26,6 @@ fast package manager server for yarn
 ```sh-session
 $ npm install -g fpms-client
 $ fpms COMMAND
-running command...
-$ fpms (-v|--version|version)
-fpms-client/0.0.4 darwin-x64 node-v14.3.0
-$ fpms --help [COMMAND]
-USAGE
-  $ fpms COMMAND
 ...
 ```
 
