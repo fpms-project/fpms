@@ -4,28 +4,24 @@
   "version": "0.0.4",
   "author": "sh4869 <nobuk4869@gmail.com>",
   "bin": {
-    "fpms": "./bin/run"
+    "fpms": "./lib/main.js"
   },
-  "bugs": "https://github.com/ssh://git@github.com/sh4869/fpms-client.git/issues",
+  "bugs": "https://github.com/sh4869/fpms-client/issues",
   "dependencies": {
-    "@oclif/command": "^1",
-    "@oclif/config": "^1",
-    "@oclif/plugin-help": "^3",
     "@yarnpkg/lockfile": "^1.1.0",
-    "debug": "^4.3.1",
     "node-fetch": "^2.6.1",
     "semver": "^7.3.4",
-    "tslib": "^1"
+    "tslib": "^1",
+    "yargs": "^17.0.1"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1",
-    "@oclif/test": "^1",
     "@types/chai": "^4",
     "@types/debug": "^4.1.5",
     "@types/mocha": "^5",
     "@types/node": "^10",
     "@types/node-fetch": "^2.5.8",
     "@types/semver": "^7.3.4",
+    "@types/yargs": "^17.0.0",
     "@types/yarnpkg__lockfile": "^1.1.4",
     "chai": "^4",
     "eslint": "^5.13",
@@ -44,29 +40,18 @@
   "files": [
     "/bin",
     "/lib",
-    "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/npm-shrinkwrap.json"
   ],
   "homepage": "https://github.com/sh4869/fpms-client",
   "keywords": [
-    "oclif"
+    "npm",
+    "yarn"
   ],
   "license": "MIT",
   "main": "index.js",
-  "oclif": {
-    "commands": "./lib/commands",
-    "bin": "fpms",
-    "plugins": [
-      "@oclif/plugin-help"
-    ]
-  },
   "repository": "ssh://git@github.com/sh4869/fpms-client.git",
   "scripts": {
-    "postpack": "rm -f oclif.manifest.json",
-    "posttest": "eslint . --ext .ts --config .eslintrc",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md"
-  },
-  "types": "lib/index.d.ts"
+    "version": "oclif-dev readme && git add README.md",
+    "build": "tsc"
+  }
 }
