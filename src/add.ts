@@ -34,12 +34,12 @@ const fetchData = async (
 
 const updateYarnLock = async (newmap: RequestToYarnPackMap) => {
   let updated;
-  if (fs.existsSync("yarn.lock")) {
+  try {
     const yarnlock = (await fs.promises.readFile("yarn.lock")).toString();
     const parse = lockfile.parse(yarnlock);
     if (parse.type !== "success") throw new Error("error of reading yarn.lock");
     updated = Object.assign(parse.object, newmap);
-  } else {
+  } catch {
     updated = newmap;
   }
   const s = lockfile.stringify(updated);
@@ -71,7 +71,7 @@ export const add_package = async (args: string[], fetchonly = false): Promise<vo
   const packs = args.map((arg) => parsearg(arg));
   const { map, requests } = await fetchData(packs);
   console.log("☑ fetch packages from fpms");
-  if (fetchonly) {
+  if (!fetchonly) {
     await Promise.all([updateYarnLock(map), updatePackageJson(requests)]);
     // exec yarn
     executeYarn();
