@@ -1,10 +1,10 @@
 {
   "name": "fpms-client",
   "description": "fast package manager client for npm",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "sh4869 <nobuk4869@gmail.com>",
   "bin": {
-    "fpms": "./lib/main.js"
+    "fpms": "./bin/fpms"
   },
   "bugs": "https://github.com/sh4869/fpms-client/issues",
   "dependencies": {
