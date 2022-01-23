@@ -9,7 +9,7 @@
   "bugs": "https://github.com/sh4869/fpms-client/issues",
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "semver": "^7.3.4",
     "yargs": "^17.0.1"
   },
